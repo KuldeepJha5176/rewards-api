@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: rewards-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - rewards-network
+
+  redis:
+    image: redis:alpine
+    container_name: rewards-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - rewards-network
+
+  app:
+    build: .
+    container_name: rewards-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/rewards-db
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - rewards-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  rewards-network:
+    driver: bridge
+
