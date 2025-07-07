@@ -36,7 +36,7 @@ A comprehensive NestJS-based rewards management system with MongoDB integration,
 }
 ```
 
-#### Rewards Collection
+#### Rewards Collections
 ```javascript
 {
   _id: ObjectId,
